@@ -17,6 +17,11 @@ Pokemon Wiki
   ```sh
   npm run start
   ```
+- Lint `.js` and `.jsx` files
+  ```sh
+  npm run lint
+  ```
+
 ---
 
 > Made with ♥️
