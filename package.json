@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src --ext .js,.jsx",
-    "start": "parcel src/index.html --open",
+    "start": "parcel src/index.html --open"
   },
   "author": "CalamityAdam",
   "license": "ISC",
