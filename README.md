@@ -118,6 +118,60 @@ stats: iterate over pokemon.stats and for each stat render the stat.stat.name an
 ```
 13. **BONUS #1**: Right now `PokemonDetails` is probably just plain text, and pretty boring looking. Since we already have React Bootstrap installed, check out the `Components` section of [the React Bootstrap docs](https://react-bootstrap.github.io/getting-started/introduction/) and see how you can style the page! 
 14. **BONUS #2**: Right now the All Pokemon link works like a normal anchor tag (when clicked the page loads/refreshes), but we want to use React Router, with no page refresh! Convert the `Nav.Link` to use the properties of the `Link` component by passing it the `as={Link}` prop, and switch out the `href` for a to prop. The [react-bootstrap docs](https://react-bootstrap.github.io/components/navs/) have examples of other components like `Nav.Item` using the `as` prop.
+
+## Part 3: Add Context
+We will be updating our existing Pokeverse application with the following:
+- Each pokemon card should have an “Add to Favorites” button.
+- The pokemon that have been added to favorites can be viewed navigating to the new route, `/favorites`. 
+- The favorites will be stored in context, in addition to `setFavorite` and `removeFavorite` functions to update the favorites list.
+
+![Part 3 Exemplar](https://user-images.githubusercontent.com/44912347/203085213-2b3bafb1-a22e-4437-b195-edc5812dd27e.gif)
+1. Continue from your Pokeverse repo you already have and checkout a new branch:
+    - `git checkout -b adds-context`
+    - When you’ve finished, merge your new branch into `main` or better yet - submit a Pull Request!
+2. In `FavoritesProvider.js` pass a value to the `Provider` giving access to `favorites`, `addFavorite`, and `removeFavorite`
+3. In `App.js` wrap the returned component in the `FavoritesProvider` imported from `FavoritesProvider.js`
+4. Create a new file in routes called `Favorites.js`. For now you can just export an empty React component. We’ll come back to this file later. 
+5. Add a route to `/favorites`
+    - Back in `App` add a new route with the path `’/favorites’` and the element of `<Favorites />` (of course, after importing Favorites). That’s it for `App.js`!
+    - In `Navigation` add another `NavLink` to `’/favorites’` with the text of something like “My Favorites” or “My Deck”
+6. Connect the addFavorite to PokemonCard!
+    - First, import `FavoritesContext` from ’FavoritesProvider’ as well as `useContext` from ’react’.
+    - Destructure `addFavorite` out of context
+    ```javascript
+    const { addFavorite } = useContext(FavoritesContext);
+    ```
+    - Import Button from Bootstrap
+    - Beneath the  `<Card.Text>` section, add a `<Button>` with an `onClick` that when clicked calls `addFavorite` and pass the name to it.
+    ```jsx
+    <Button variant="primary" onClick={() => addFavorite(name)}>
+      Add to Favorites
+    </Button>
+    ```
+7. Back in `Favorites`, follow the same pattern from PokemonCard to pull out favorites from context.
+    - Destructure favorites
+    - Map over favorites and for each favorite render a `<PokemonCard>` passing the prop of `name={favorite}`
+    - **TIP**: To get the styling similar to what we have on the main page, take a look at how you’re rendering all of the cards in `Home.js`. It should be structured something like this: `Container` > `Row` > `1 Col` for each PokemonCard
+8. Try navigating to `/favorites` now - you should see any pokemon that you clicked “Add to Favorites” here! You also may notice that you can click “Add to Favorites” over and over and get the same pokemon duplicated over and over. Take a look at the first item of the Bonus to fix that!
+9. **BONUS**: After someone clicks “Add to Favorites”, they shouldn’t be able to click that button again. We already have a `removeFavorite` function available in Context that can be helpful here!
+    - If a pokemon is already in `favorites`, instead of rendering an Add to Favorites button on the PokemonCard let’s render a Remove from Favorites button!
+    - Try using a ternary for this
+    ```jsx
+    {someExpression ? (
+    <RenderThisThingIfSomeExpressionIsTruthy />
+    ) : (
+        <RenderThisThingIfSomeExpressionIsFalsey />
+    )}
+
+    // or, in plain english:
+    {ifThis ? (
+        then this
+    ) : (
+        else this
+    )}
+    ```
+    - Try [utilizing includes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes) for this. If favorites includes name, then render an “Add to Favorites” button, else render a “Remove from Favorites” button.
+    
 ---
 
 > Made with ♥️ at [Multiverse](https://www.multiverse.io/en-US)
